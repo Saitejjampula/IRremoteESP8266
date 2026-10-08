@@ -142,9 +142,9 @@ bool IRDaikinESP::validChecksum(uint8_t state[], const uint16_t length) {
     return false;
   // Data #3
   if (length < kDaikinSection1Length + kDaikinSection2Length + 2 ||
-      state[length - 1] != sumBytes(state + kDaikinSection1Length +
-                                        kDaikinSection2Length,
-                                    length - (kDaikinSection1Length + kDaikinSection2Length) - 1))
+  state[length - 1] !=
+          sumBytes(state + kDaikinSection1Length + kDaikinSection2Length,
+                  length - (kDaikinSection1Length + kDaikinSection2Length) - 1))
     return false;
   return true;
 }
@@ -1201,7 +1201,7 @@ void IRDaikin2::setHumidity(const uint8_t percent) {
     break;
   }
   _.HumidOn = (_.Humidity != kDaikin2HumidityOff);  // Enabled?
-  setTemp(getTemp());                               // Adjust the temperature if we need to.
+  setTemp(getTemp());  // Adjust the temperature if we need to.
 }
 
 /// Convert a stdAc::opmode_t enum into its native mode.
@@ -1514,7 +1514,7 @@ bool IRDaikin200::validChecksum(uint8_t state[], const uint16_t length) {
   // Validate the checksum of section #1.
   if (length <= kDaikin200Section1Length - 1 ||
       state[kDaikin200Section1Length - 1] != sumBytes(
-                                                 state, kDaikin200Section1Length - 1))
+          state, kDaikin200Section1Length - 1))
     return false;
   // Validate the checksum of section #2
   if (length <= kDaikin200Section1Length + 1 ||
@@ -1708,8 +1708,9 @@ uint8_t IRDaikin200::getSwingVPosition(void) const { return _.Swing; }
 
 /// Set the Horizontal Swing mode of the A/C.
 /// @param[in] on true, the setting is on. false, the setting is off.
-void IRDaikin200::setSwingHorizontal(const bool on) {}  // stub, byte unknown
-
+void IRDaikin200::setSwingHorizontal(const bool on) {
+  (void)on;  // Horizontal swing byte/bit not identified yet.
+}
 /// Get the Horizontal Swing mode of the A/C.
 /// @return true, the setting is on. false, the setting is off.
 bool IRDaikin200::getSwingHorizontal(void) const { return false; }
@@ -1842,13 +1843,13 @@ String IRDaikin200::toString(void) const {
                             kDaikin200Heat, kDaikin200Dry, kDaikin200Fan);
   result += addTempToString(getTemp());
   result += addFanToString(getFan(),
-                           kDaikin200FanSpeed4,   // high
-                           kDaikin200FanSpeed1,   // low
-                           kDaikin200FanAuto,     // automatic
-                           kDaikin200FanAuto,     // quiet (no quiet speed, use auto)
-                           kDaikin200FanSpeed3,   // medium
-                           kDaikin200FanSpeed5,   // maximum
-                           kDaikin200FanSpeed2);  // medium_high
+                          kDaikin200FanSpeed4,   // high
+                          kDaikin200FanSpeed1,   // low
+                          kDaikin200FanAuto,     // automatic
+                          kDaikin200FanAuto,     // quiet
+                          kDaikin200FanSpeed3,   // medium
+                          kDaikin200FanSpeed5,   // maximum
+                          kDaikin200FanSpeed2);  // medium_high
   switch (_.Swing) {
   case kDaikin200SwingWide:
     result += addLabeledString("Wide", kSwingVStr);
@@ -2001,8 +2002,8 @@ void IRDaikin216::send(const uint16_t repeat) {
 bool IRDaikin216::validChecksum(uint8_t state[], const uint16_t length) {
   // Validate the checksum of section #1.
   if (length <= kDaikin216Section1Length - 1 ||
-      state[kDaikin216Section1Length - 1] != sumBytes(
-                                                 state, kDaikin216Section1Length - 1))
+      state[kDaikin216Section1Length - 1] !=
+          sumBytes(state, kDaikin216Section1Length - 1))
     return false;
   // Validate the checksum of section #2 (a.k.a. the rest)
   if (length <= kDaikin216Section1Length + 1 ||
@@ -2335,7 +2336,7 @@ bool IRDaikin160::validChecksum(uint8_t state[], const uint16_t length) {
   // Validate the checksum of section #1.
   if (length <= kDaikin160Section1Length - 1 ||
       state[kDaikin160Section1Length - 1] != sumBytes(
-                                                 state, kDaikin160Section1Length - 1))
+          state, kDaikin160Section1Length - 1))
     return false;
   // Validate the checksum of section #2 (a.k.a. the rest)
   if (length <= kDaikin160Section1Length + 1 ||
@@ -2718,7 +2719,7 @@ bool IRDaikin176::validChecksum(uint8_t state[], const uint16_t length) {
   // Validate the checksum of section #1.
   if (length <= kDaikin176Section1Length - 1 ||
       state[kDaikin176Section1Length - 1] != sumBytes(
-                                                 state, kDaikin176Section1Length - 1))
+          state, kDaikin176Section1Length - 1))
     return false;
   // Validate the checksum of section #2 (a.k.a. the rest)
   if (length <= kDaikin176Section1Length + 1 ||
@@ -4976,7 +4977,7 @@ void IRDaikin312::setHumidity(const uint8_t percent) {
     break;
   }
   _.HumidOn = (_.Humidity != kDaikin312HumidityOff);  // Enabled?
-  setTemp(getTemp());                                 // Adjust the temperature if we need to.
+  setTemp(getTemp());  // Adjust the temperature if we need to.
 }
 
 /// Convert a stdAc::opmode_t enum into its native mode.
@@ -5233,12 +5234,12 @@ bool IRrecv::decodeDaikin312(decode_results* results, uint16_t offset,
   // Header/Leader Section
   uint64_t leaderdata = 0;
   uint16_t used = matchGeneric(results->rawbuf + offset, &leaderdata,
-                               results->rawlen - offset, kDaikinHeaderLength,
-                               0, 0,  // No Header Mark or Space for the "header"
-                               kDaikin312BitMark, kDaikin312OneSpace,
-                               kDaikin312BitMark, kDaikin312ZeroSpace,
-                               kDaikin312BitMark, kDaikin312HdrGap,
-                               false, kDaikinTolerance, 0, false);
+                              results->rawlen - offset, kDaikinHeaderLength,
+                              0, 0,  // No Header Mark or Space for the "header"
+                              kDaikin312BitMark, kDaikin312OneSpace,
+                              kDaikin312BitMark, kDaikin312ZeroSpace,
+                              kDaikin312BitMark, kDaikin312HdrGap,
+                              false, kDaikinTolerance, 0, false);
   if (!used)
     return false;  // Failed to match.
   if (leaderdata)

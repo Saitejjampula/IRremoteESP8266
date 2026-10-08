@@ -334,7 +334,8 @@ union Daikin200Protocol {
     uint8_t Sum1;     // 6
     // Frame 2
     uint8_t pad1[5];    // 7-11
-    uint8_t MsgType;    // 12: 0x73=normal, 0x04=timerON, 0x08=timerOFF, 0x0C=both
+    uint8_t MsgType;    // 12: 0x73=normal, 0x04=timerON,
+                        // 0x08=timerOFF, 0x0C=both
     uint8_t Unknown13;  // 13: 0x00 normal, 0x04 seen in mode change
     uint8_t Power : 1;  // 14 bit0
     uint8_t : 3;        // 14 bits1-3
@@ -1260,7 +1261,7 @@ class IRDaikin2 {
 
 /// Class for handling detailed Daikin 200-bit A/C messages.
 class IRDaikin200 {
-  public:
+ public:
   explicit IRDaikin200(const uint16_t pin, const bool inverted = false,
                        const bool use_modulation = true);
 
@@ -1309,7 +1310,7 @@ class IRDaikin200 {
   String toString(void) const;
 #ifndef UNIT_TEST
 
-  private:
+ private:
   IRsend _irsend;  ///< instance of the IR send class
 #else
   /// @cond IGNORE
