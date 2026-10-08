@@ -1464,7 +1464,6 @@ bool IRrecv::decodeDaikin2(decode_results* results, uint16_t offset,
 /// @param[in] data The message to be sent.
 /// @param[in] nbytes The number of bytes of message to be sent.
 /// @param[in] repeat The number of times the command is to be repeated.
-/// @see https://github.com/crankyoldgit/IRremoteESP8266/issues/1802
 void IRsend::sendDaikin200(const unsigned char data[], const uint16_t nbytes,
                            const uint16_t repeat) {
   if (nbytes < kDaikin200Section1Length)
